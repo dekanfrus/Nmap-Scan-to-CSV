@@ -75,6 +75,10 @@ def get_host_data(root):
                 except (IndexError, KeyError):
                     product = ''      
                 try:
+                    version = port.findall('service')[0].attrib['version']
+                except (IndexError, KeyError):
+                    version = ''
+                try:
                     servicefp = port.findall('service')[0].attrib['servicefp']
                 except (IndexError, KeyError):
                     servicefp = ''
@@ -90,7 +94,7 @@ def get_host_data(root):
                 # Create a list of the port data
                 port_data.extend((ip_address, host_name, os_name,
                                   proto, port_id, service, product, 
-                                  servicefp, script_id, script_output))
+                                  version, servicefp, script_id, script_output))
                 
                 # Add the port data to the host data
                 host_data.append(port_data)
@@ -123,7 +127,7 @@ def parse_to_csv(data):
         csv_writer = csv.writer(csv_file)
         top_row = [
             'IP', 'Host', 'OS', 'Proto', 'Port',
-            'Service', 'Product', 'Service FP',
+            'Service', 'Product', 'Version', 'Service FP',
             'NSE Script ID', 'NSE Script Output', 'Notes'
         ]
         csv_writer.writerow(top_row)
